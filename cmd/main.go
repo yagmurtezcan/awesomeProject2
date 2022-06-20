@@ -7,15 +7,11 @@ import (
 )
 
 func main() {
-	pstgrs := postgres.NewDatabase()
-	pstgrs.AutoMigrate(
+	createDBTable := postgres.NewDatabase()
+	createDBTable.AutoMigrate(
 		&entity.User{},
 	)
 
-	// service
-
-	//handler
-
-	srv := server.NewServer(pstgrs.Db)
+	srv := server.NewServer(createDBTable.Db)
 	srv.StartServer()
 }

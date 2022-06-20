@@ -20,11 +20,9 @@ func NewDatabase() *Database {
 	return &Database{Db: database}
 }
 
-func (d *Database) AutoMigrate(models ...interface{}) (string, error) {
+func (d *Database) AutoMigrate(models ...interface{}) {
 	err := d.Db.AutoMigrate(models...)
 	if err != nil {
 		log.Fatalln("Migration error")
 	}
-
-	return "test", err
 }
