@@ -1,7 +1,7 @@
 package main
 
 import (
-	"awesomeProject2/internal/entity"
+	"awesomeProject2/internal/model"
 	"awesomeProject2/internal/server"
 	"awesomeProject2/pkg/postgres"
 )
@@ -9,7 +9,7 @@ import (
 func main() {
 	createDBTable := postgres.NewDatabase()
 	createDBTable.AutoMigrate(
-		&entity.User{},
+		&model.User{},
 	)
 
 	srv := server.NewServer(createDBTable.Db)

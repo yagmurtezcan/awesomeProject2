@@ -22,7 +22,9 @@ func (s *Server) StartServer() {
 	userRepository := repository.NewUserRepository(s.db)
 	userService := service.NewUserService(userRepository)
 	userHandler := handler.NewUserHandler(userService)
+
 	router.GET("/", userHandler.GetAllUser)
+	router.POST("/user", userHandler.CreateUser)
 
 	err := router.Run("localhost:3000")
 	if err != nil {
