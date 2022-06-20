@@ -41,3 +41,8 @@ func (u *UserHandler) CreateUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, createdUser)
 }
+
+func (u *UserHandler) DeleteUser(c *gin.Context) {
+	//id, _ := strconv.Atoi(c.Param("id"))
+
+}

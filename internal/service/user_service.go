@@ -24,3 +24,13 @@ func (u *UserService) CreateUser(user model.User) (*model.User, error) {
 	}
 	return createUser, nil
 }
+
+//func (u *UserService) GetUserById()
+
+func (u *UserService) DeleteUser(user model.User) (*model.User, error) {
+	deleteUser, err := u.userRepository.DeleteUser(user)
+	if err != nil {
+		return nil, err
+	}
+	return deleteUser, nil
+}

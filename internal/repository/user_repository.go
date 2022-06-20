@@ -25,3 +25,19 @@ func (u *UserRepository) CreateUser(user model.User) (*model.User, error) {
 	}
 	return &user, nil
 }
+
+func (u *UserRepository) GetUserById(id int) (*model.User, error) {
+	var user model.User
+	if err := u.db.First(&user, id).Error; err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func (u *UserRepository) DeleteUser(user model.User) (*model.User, error) {
+	if err := u.db.Delete(user).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
+}

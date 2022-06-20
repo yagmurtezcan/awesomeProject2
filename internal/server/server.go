@@ -25,6 +25,7 @@ func (s *Server) StartServer() {
 
 	router.GET("/", userHandler.GetAllUser)
 	router.POST("/user", userHandler.CreateUser)
+	router.DELETE("/:id", userHandler.DeleteUser)
 
 	err := router.Run("localhost:3000")
 	if err != nil {
