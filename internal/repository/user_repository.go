@@ -13,10 +13,12 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 	return &UserRepository{db: db}
 }
 
-func (u *UserRepository) GetAllUser() []model.User {
+func (u *UserRepository) GetAllUser() ([]model.User, error) {
 	var user []model.User
-	u.db.Find(&user)
-	return user
+	if err := u.db.Find(&user).Error; err != nil {
+		return nil, err
+	}
+	return user, nil
 }
 
 func (u *UserRepository) CreateUser(user model.User) (*model.User, error) {
@@ -28,16 +30,22 @@ func (u *UserRepository) CreateUser(user model.User) (*model.User, error) {
 
 func (u *UserRepository) GetUserById(id int) (*model.User, error) {
 	var user model.User
-	if err := u.db.First(&user, id).Error; err != nil {
+	if err := u.db.Where("id=?", id).First(&user).Error; err != nil {
 		return nil, err
 	}
-
 	return &user, nil
 }
 
-func (u *UserRepository) DeleteUser(user model.User) (*model.User, error) {
+func (u *UserRepository) DeleteUser(user *model.User) error {
 	if err := u.db.Delete(user).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (u *UserRepository) UpdateUser(user *model.User) (*model.User, error) {
+	if err := u.db.Updates(&user).Error; err != nil {
 		return nil, err
 	}
-	return &user, nil
+	return user, nil
 }

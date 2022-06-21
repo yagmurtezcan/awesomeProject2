@@ -23,9 +23,14 @@ func (s *Server) StartServer() {
 	userService := service.NewUserService(userRepository)
 	userHandler := handler.NewUserHandler(userService)
 
-	router.GET("/", userHandler.GetAllUser)
-	router.POST("/user", userHandler.CreateUser)
-	router.DELETE("/:id", userHandler.DeleteUser)
+	user := router.Group("/user")
+	{
+		user.GET("/", userHandler.GetAllUser)
+		user.GET("/:id", userHandler.GetUserById)
+		user.POST("/", userHandler.CreateUser)
+		user.POST("/:id", userHandler.UpdateUser)
+		user.DELETE("/:id", userHandler.DeleteUser)
+	}
 
 	err := router.Run("localhost:3000")
 	if err != nil {
