@@ -21,11 +21,11 @@ func (u *UserRepository) GetAllUser() ([]model.User, error) {
 	return user, nil
 }
 
-func (u *UserRepository) CreateUser(user model.User) (*model.User, error) {
+func (u *UserRepository) CreateUser(user *model.User) error {
 	if err := u.db.Save(&user).Error; err != nil {
-		return nil, err
+		return err
 	}
-	return &user, nil
+	return nil
 }
 
 func (u *UserRepository) GetUserById(id int) (*model.User, error) {
@@ -36,8 +36,9 @@ func (u *UserRepository) GetUserById(id int) (*model.User, error) {
 	return &user, nil
 }
 
-func (u *UserRepository) DeleteUser(user *model.User) error {
-	if err := u.db.Delete(user).Error; err != nil {
+func (u *UserRepository) DeleteUser(userId int) error {
+	var user model.User
+	if err := u.db.Where("id=?", userId).Delete(&user).Error; err != nil {
 		return err
 	}
 	return nil

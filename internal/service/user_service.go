@@ -23,11 +23,11 @@ func (u *UserService) GetAllUser() ([]model.User, error) {
 }
 
 func (u *UserService) CreateUser(user model.User) (*model.User, error) {
-	createUser, err := u.userRepository.CreateUser(user)
+	err := u.userRepository.CreateUser(&user)
 	if err != nil {
 		return nil, err
 	}
-	return createUser, nil
+	return &user, nil
 }
 
 func (u *UserService) GetUserById(id int) (*model.User, error) {
@@ -39,12 +39,7 @@ func (u *UserService) GetUserById(id int) (*model.User, error) {
 }
 
 func (u *UserService) DeleteUser(userId int) error {
-	user, err := u.GetUserById(userId)
-	if err != nil {
-		return err
-	}
-
-	err = u.userRepository.DeleteUser(user)
+	err := u.userRepository.DeleteUser(userId)
 	if err != nil {
 		return err
 	}
