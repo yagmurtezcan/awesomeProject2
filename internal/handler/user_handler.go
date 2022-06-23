@@ -4,6 +4,7 @@ import (
 	"awesomeProject2/internal/dto"
 	"awesomeProject2/internal/model"
 	"awesomeProject2/internal/service"
+	"awesomeProject2/internal/validator"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -28,15 +29,24 @@ func (u *UserHandler) GetAllUser(c *gin.Context) {
 
 func (u *UserHandler) CreateUser(c *gin.Context) {
 	var userDTO dto.UserDTO
-	c.BindJSON(&userDTO)
+	err := c.BindJSON(&userDTO)
+	if err != nil {
+		return
+	}
 
-	model := model.User{
+	validationError := validator.ValidateRequest(userDTO)
+	if validationError != nil {
+		c.JSON(http.StatusBadRequest, validationError)
+		return
+	}
+
+	user := model.User{
 		FirstName: userDTO.FirstName,
 		LastName:  userDTO.LastName,
 		Email:     userDTO.Email,
 	}
 
-	createdUser, err := u.userService.CreateUser(model)
+	createdUser, err := u.userService.CreateUser(user)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -76,7 +86,16 @@ func (u *UserHandler) DeleteUser(c *gin.Context) {
 
 func (u *UserHandler) UpdateUser(c *gin.Context) {
 	var userDTO dto.UserDTO
-	c.BindJSON(&userDTO)
+	err := c.BindJSON(&userDTO)
+	if err != nil {
+		return
+	}
+
+	validationError := validator.ValidateRequest(userDTO)
+	if validationError != nil {
+		c.JSON(http.StatusBadRequest, validationError)
+		return
+	}
 
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
