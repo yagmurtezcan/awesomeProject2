@@ -50,3 +50,11 @@ func (u *UserRepository) UpdateUser(user *model.User) (*model.User, error) {
 	}
 	return user, nil
 }
+
+func (u *UserRepository) GetLoginUser(email string) (*model.User, error) {
+	var user model.User
+	if err := u.db.Where("email=?", email).First(&user).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
+}

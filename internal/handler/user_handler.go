@@ -44,6 +44,7 @@ func (u *UserHandler) CreateUser(c *gin.Context) {
 		FirstName: userDTO.FirstName,
 		LastName:  userDTO.LastName,
 		Email:     userDTO.Email,
+		Password:  userDTO.Password,
 	}
 
 	createdUser, err := u.userService.CreateUser(user)

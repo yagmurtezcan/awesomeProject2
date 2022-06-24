@@ -4,6 +4,7 @@ import (
 	"awesomeProject2/internal/dto"
 	"awesomeProject2/internal/model"
 	"awesomeProject2/internal/repository"
+	"awesomeProject2/pkg/helper"
 )
 
 type UserService struct {
@@ -23,6 +24,11 @@ func (u *UserService) GetAllUser() ([]model.User, error) {
 }
 
 func (u *UserService) CreateUser(user model.User) (*model.User, error) {
+	hashedPassword, errs := helper.HashPassword(user.Password)
+	if errs != nil {
+		return nil, errs
+	}
+	user.Password = hashedPassword
 	err := u.userRepository.CreateUser(&user)
 	if err != nil {
 		return nil, err

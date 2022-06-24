@@ -22,6 +22,8 @@ func (s *Server) StartServer() {
 	userRepository := repository.NewUserRepository(s.db)
 	userService := service.NewUserService(userRepository)
 	userHandler := handler.NewUserHandler(userService)
+	loginService := service.NewLoginService(userRepository)
+	loginHandler := handler.NewLoginHandler(loginService)
 
 	user := router.Group("/user")
 	{
@@ -30,6 +32,11 @@ func (s *Server) StartServer() {
 		user.POST("/", userHandler.CreateUser)
 		user.POST("/:id", userHandler.UpdateUser)
 		user.DELETE("/:id", userHandler.DeleteUser)
+	}
+
+	login := router.Group("/login")
+	{
+		login.POST("/", loginHandler.Login)
 	}
 
 	err := router.Run("localhost:3000")
